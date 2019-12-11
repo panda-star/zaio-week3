@@ -1,0 +1,82 @@
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <!-- add -->
+    <!-- JQuery -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+    <!-- style sheet can't be found by local host -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- post fix -->
+    <script src="http://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <!-- script can't be found by local host -->
+    <script type= "application/javascript" src="/assets/todo-list.js"></script>
+    <!-- <script src="/todoController.js" ></script> -->
+    <script type="text/javascript">
+      console.log("does this work?");
+      // puting all todo-list code in
+      $(document).ready(function(){
+      $('form').on('submit', function(){
+
+        var item = $('form input');
+        var todo = {item: item.val()};
+
+        $.ajax({
+          type: 'POST',
+          url: '/todo',
+          data: todo,
+
+          success: function(data){
+            //do something with the data via front-end framework
+            // console.log("now running todolist post");
+            location.reload();
+          }
+        });
+
+        // return false;
+
+      });
+
+      $('li').on('click', function(){
+          // console.log("del process starts");
+          var item = $(this).text();
+          var item = $.trim(item);
+          var item = item.replace(/ /g,"-");
+          $.ajax({
+            type: 'DELETE',
+            url: '/todo/:' + item,
+            success: function(data){
+              //do something with the data via front-end framework
+              location.reload();
+              console.log("del success");
+            }
+          });
+          // console.log("del process ends");
+      });
+
+    });
+    // todo-list code
+    </script>
+
+        <!-- no styling works -->
+        <!-- <link href="styles.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="test.css"> -->
+    <!-- add -->
+    <title>to do list</title>
+  </head>
+  <body>
+    <h1>My todo List</h1>
+    <div id="Todo-table">
+      <form method="post" >
+        <input type="text" name="item" id="item" placeholder="add new item..." required />
+        <button type="submit">add item</button>
+  
+      </form>
+      <ul>
+        <% for(var i=0; i < todos.length; i++) { %>
+          <li> <%= todos[i].item %> </li>
+        <% } %>
+
+      </ul>
+    </div>
+  </body>
+</html>
